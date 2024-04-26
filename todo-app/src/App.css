@@ -36,3 +36,40 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  font-family: Arial, sans-serif; /* 设置字体 */
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+}
+
+button {
+  background-color: #4CAF50; /* 按钮背景色 */
+  color: white; /* 按钮文字颜色 */
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+
