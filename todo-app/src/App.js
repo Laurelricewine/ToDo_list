@@ -33,8 +33,21 @@ function App() {
     
 
     const handleDeleteTodo = (id) => {
-        setTodos(todos.filter(todo => todo.id !== id));
+        fetch(`http://localhost:3000/todos/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // 这里更新前端状态以反映删除操作
+                setTodos(todos.filter(todo => todo.id !== id));
+            } else {
+                // 如果响应不是成功状态，打印错误信息
+                console.error('Failed to delete todo');
+            }
+        })
+        .catch(error => console.error('Error deleting todo:', error));
     };
+    
 
     const handleToggleCompleted = (id) => {
         setTodos(todos.map(todo => {
