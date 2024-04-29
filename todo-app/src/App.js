@@ -10,15 +10,27 @@ function App() {
 
     // 获取待办事项
     useEffect(() => {
-        fetch('/todos')
+        fetch('http://localhost:3000/todos')
             .then(res => res.json())
             .then(data => setTodos(data))
             .catch(err => console.error('Error fetching todos:', err));
     }, []); // 空数组确保这个 effect 只在组件加载时运行一次
 
     const handleAddTodo = (todo) => {
-        setTodos([...todos, { ...todo, id: Date.now() }]);
+        fetch('http://localhost:3000/todos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(todo)
+        })
+        .then(response => response.json())
+        .then(data => {
+            setTodos([...todos, data]); // Assuming the backend returns the added todo item with an id
+        })
+        .catch(error => console.error('Error adding todo:', error));
     };
+    
 
     const handleDeleteTodo = (id) => {
         setTodos(todos.filter(todo => todo.id !== id));
@@ -41,8 +53,5 @@ function App() {
         </div>
     );
 }
-
-//export default App;
-
 
 export default App;

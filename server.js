@@ -35,7 +35,7 @@ app.get('/todos', (req, res) => {
         if (err) {
             return res.status(500).send({ message: 'Error fetching todos', error: err });
         }
-        res.send(results);
+        res.json(results);
     });
 });
 
@@ -57,14 +57,23 @@ app.get('/todos/:id', (req, res) => {
 // 创建新的待办事项
 app.post('/todos', (req, res) => {
     const { user_id, title, description, is_completed, due_date } = req.body;
-    const sql = `INSERT INTO Todos (user_id, title, description, is_completed, due_date) VALUES (?, ?, ?, ?)`;
-    db.query(sql, [user_id, title, description, is_completed], (err, result) => {
+    const sql = `INSERT INTO Todos (user_id, title, description, is_completed, due_date) VALUES (?, ?, ?, ?, ?)`;
+    db.query(sql, [user_id, title, description, is_completed, due_date], (err, result) => {
         if (err) {
             return res.status(500).send({ message: 'Error adding new todo', error: err });
         }
-        res.status(201).send({ message: 'Todo added', todoId: result.insertId });
+        // 查询刚刚插入的待办事项
+        const queryNewTodoSql = `SELECT * FROM Todos WHERE id = ?`;
+        db.query(queryNewTodoSql, [result.insertId], (err, results) => {
+            if (err) {
+                return res.status(500).send({ message: 'Error fetching new todo', error: err });
+            }
+            // 返回新创建的待办事项数据
+            res.status(201).send(results[0]);
+        });
     });
 });
+
 
 // 更新待办事项
 app.put('/todos/:id', (req, res) => {
